@@ -2,8 +2,10 @@ import React, { useState } from 'react';
 import { useDispatch } from 'react-redux';
 import { login } from '../redux/authSlice';
 import { useNavigate } from 'react-router-dom';
+import { useRole } from '../context/RoleContext';
 
 const Login = () => {
+  const { selectedRole } = useRole();
   const [username, setUsername] = useState('');
   const [password, setPassword] = useState('');
   const dispatch = useDispatch();
@@ -12,34 +14,26 @@ const Login = () => {
 
   const handleLogin = () => {
     try {
-      dispatch(login({ username, password }));
+      dispatch(login({ username, password, role: selectedRole }));
       setError(''); // Clear any previous errors
 
       // Redirect to respective dashboards
-      switch (username) {
-        case 'teamMember1':
-          navigate('/team-member');
-          break;
-        case 'teamLead1':
-          navigate('/team-lead');
-          break;
-        case 'projectManager1':
-          navigate('/project-manager');
-          break;
-        case 'admin':
-          navigate('/admin');
-          break;
-        default:
-          navigate('/');
-      }
+      const roleToRouteMap = {
+        TeamMember: '/team-member',
+        TeamLead: '/team-lead',
+        ProjectManager: '/project-manager',
+        Admin: '/admin',
+      };
+
+      navigate(roleToRouteMap[selectedRole]);
     } catch (err) {
-      setError('Invalid username or password');
+      setError('Invalid username, password, or role mismatch');
     }
   };
 
   return (
     <div>
-      <h1>Login</h1>
+      <h1>Login as {selectedRole}</h1>
       {error && <p style={{ color: 'red' }}>{error}</p>}
       <input
         type="text"

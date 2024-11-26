@@ -1,15 +1,33 @@
 import React from 'react';
+import { useSelector } from 'react-redux';
+import { useDispatch } from 'react-redux';
+import { logout } from '../redux/authSlice';
+import { useNavigate } from 'react-router-dom';
 
 const ProjectManagerDashboard = () => {
+  const user = useSelector((state) => state.auth.user);
+  const dispatch = useDispatch();
+  const navigate = useNavigate();
+
+  const handleLogout = () => {
+    dispatch(logout());
+    navigate('/');
+  };
+
   return (
     <div>
       <h1>Project Manager Dashboard</h1>
-      <p>You can:</p>
+      <p>Welcome, {user?.username}!</p>
+      <h2>Project Progress</h2>
       <ul>
-        <li>Assign projects to team leads.</li>
-        <li>Access details of team leads and team members.</li>
-        <li>Create, read, update, and delete projects.</li>
+        <li>Module 1: 80% Complete</li>
+        <li>Module 2: 50% Complete</li>
+        <li>Module 3: Not Started</li>
       </ul>
+      <h2>Generate Reports</h2>
+      <button>Generate Weekly Report</button>
+      <button>Generate Monthly Report</button>
+      <button onClick={handleLogout}>Logout</button>
     </div>
   );
 };
