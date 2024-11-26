@@ -15,14 +15,14 @@ const authSlice = createSlice({
   initialState,
   reducers: {
     login(state, action) {
-      const { username, password } = action.payload;
+      const { username, password, role } = action.payload;
       const user = state.users.find(
         (u) => u.username === username && u.password === password
       );
-      if (user) {
+      if (user && user.role === role) {
         state.user = user; // Set logged-in user
       } else {
-        throw new Error('Invalid credentials');
+        throw new Error('Invalid credentials or role mismatch');
       }
     },
     logout(state) {

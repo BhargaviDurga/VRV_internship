@@ -1,17 +1,31 @@
 import React from 'react';
+import { useSelector } from 'react-redux';
+import { useDispatch } from 'react-redux';
+import { logout } from '../redux/authSlice';
+import { useNavigate } from 'react-router-dom';
 
-const TeamLeadDashboard = () => {
+const TeamMemberDashboard = () => {
+  const user = useSelector((state) => state.auth.user);
+  const dispatch = useDispatch();
+  const navigate = useNavigate();
+
+  const handleLogout = () => {
+    dispatch(logout());
+    navigate('/');
+  };
+
   return (
     <div>
-      <h1>Team Lead Dashboard</h1>
-      <p>You can:</p>
+      <h1>Team Member Dashboard</h1>
+      <p>Welcome, {user?.username}!</p>
+      <h2>Your Tasks</h2>
       <ul>
-        <li>Assign tasks to team members.</li>
-        <li>View and manage the details of all team members.</li>
-        <li>Create, update, and read project details and tasks.</li>
+        <li>Task 1: Complete module documentation - Status: Pending</li>
+        <li>Task 2: Bug fixes for UI components - Status: In Progress</li>
       </ul>
+      <button onClick={handleLogout}>Logout</button>
     </div>
   );
 };
 
-export default TeamLeadDashboard;
+export default TeamMemberDashboard;
